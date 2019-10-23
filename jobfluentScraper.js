@@ -1,34 +1,31 @@
-const webdriver = require('selenium-webdriver')
+const webdriver = require('selenium-webdriver');
 
-const { By } = webdriver
+const { By } = webdriver;
 
 class JobFluentScraper {
-  constructor (config) {
-    this.driver = new webdriver.Builder()
-      .forBrowser('chrome')
-      .usingServer('http://localhost:4444/wd/hub')
-      .build()
-  }
+	constructor(config) {
+		this.driver = new webdriver.Builder().forBrowser('chrome').usingServer('http://localhost:4444/wd/hub').build();
+	}
 
-  goodReadsScrapeByCss (url, element, attr) {
-    return new Promise((resolve) => {
-      this.driver.get(url)
-      this.driver.findElements(By.className(element)).then((els) => {
-        const promises = webdriver.promise.map(els, pEl => {
-          return pEl.getAttribute(attr).then(inner => {
-            console.log(inner, '-')
-            return inner
-          })
-        })
-        Promise.all(promises).then(resolve)
-      })
-    })
-  }
+	getByClassNameAndAttr(url, element, attr) {
+		return new Promise((resolve) => {
+			this.driver.get(url);
+			this.driver.findElements(By.className(element)).then((els) => {
+				const promises = els.map((webElement) => {
+					return webElement.getAttribute(attr).then((inner) => {
+            return inner;
+					});
+				});
 
-  __quit () {
-    return this.driver.quit()
-  }
+				Promise.all(promises).then(resolve);
+			});
+		});
+	}
+
+	__quit() {
+		return this.driver.quit();
+	}
 }
-const scraper = new JobFluentScraper()
+const scraper = new JobFluentScraper();
 
-module.exports = scraper
+module.exports = scraper;
