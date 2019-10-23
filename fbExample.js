@@ -1,4 +1,4 @@
-const FbScrape = require('./index.js')
+const FbScrape = require('./fbScraper.js')
 
 const fbScrape = new FbScrape({
     id: "100004269196300",
@@ -7,5 +7,5 @@ const fbScrape = new FbScrape({
 })
 
 fbScrape.getData().then((data)=>{
-    console.log(data)
+    console.log(data,'data')
 })

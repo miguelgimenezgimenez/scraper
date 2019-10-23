@@ -51,11 +51,19 @@ class FbScraper {
         this.driver.findElement(By.css("#loginbutton")).click();
 
         this.driver.get(`https://www.facebook.com/${this.config.id}`);
-        return this.driver.findElement(By.css('a[data-tab-key="about"]')).getAttribute("href").then((href) => {
-            console.log(href)
-            const url = URL.parse(href);
-            this.__fbName = url.pathname.replace("about", '').replace(/\//g, '');
-        });
+        return this.driver.findElements(By.className('_44wv _1-l4'))
+        .then((items)=>{
+            webdriver.promise.map(items, (item)=>{
+               item.getAttribute('innerHTML').then(inner=>{
+                   console.log(inner)
+               })
+            })
+        })
+        // .getAttribute("innerHTML").then((items) => {
+        //     console.log(items)
+        //     // const url = URL.parse(href);
+        //     // this.__fbName = url.pathname.replace("about", '').replace(/\//g, '');
+        // });
     }
 
     __getAbout() {
@@ -70,10 +78,12 @@ class FbScraper {
             els.forEach((el) => {
                 webdriver.promise.fulfilled(el)
                     .then((pElem) => {
+                        console.log(pElem)
                         return pElem.getText();
                     })
                     .then((text) => {
                         const data = text.split("\n");
+                        console.log(data)
                         if (data[0] == "Birthday" && moment(data[1], 'MMM DD, YYYY').isValid()) {
                             this.__birthday = moment(data[1], 'DD MMM YYYY').format('DD-MM-YYYY')
                         }
