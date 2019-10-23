@@ -26,9 +26,7 @@ class FbScraper {
             this.__openAccount()
             .then(() => {
                 console.log('-------------')
-                // this.__getAbout();
-
-                // this.__getMusic();
+               
 
                 this.__quit().then(() => {
                     resolve({
@@ -66,66 +64,6 @@ class FbScraper {
         // });
     }
 
-    __getAbout() {
-        if (!this.__fbName) throw "name is null";
-
-        this.driver.get(`https://www.facebook.com/${this.__fbName}/about`);
-
-        this.driver.findElement(By.css('[data-overviewsection="places"] > div > div > div a')).getText().then((el) => {
-            this.__location = el.trim();
-        });
-        this.driver.findElements(By.css('[data-overviewsection="contact_basic"] li')).then((els) => {
-            els.forEach((el) => {
-                webdriver.promise.fulfilled(el)
-                    .then((pElem) => {
-                        console.log(pElem)
-                        return pElem.getText();
-                    })
-                    .then((text) => {
-                        const data = text.split("\n");
-                        console.log(data)
-                        if (data[0] == "Birthday" && moment(data[1], 'MMM DD, YYYY').isValid()) {
-                            this.__birthday = moment(data[1], 'DD MMM YYYY').format('DD-MM-YYYY')
-                        }
-                    })
-            })
-        });
-
-        this.driver.get(`https://www.facebook.com/${this.__fbName}/about?section=contact-info&pnref=about`);
-        this.driver.findElements(By.css('#pagelet_basic ul li > div')).then((els) => {
-            els.forEach((el) => {
-                webdriver.promise.fulfilled(el)
-                    .then((pElem) => {
-                        return pElem.findElement(By.css('div:nth-child(1)')).getText().then((text) => {
-                            if (text == 'Gender') {
-                                return pElem.findElement(By.css('div:nth-child(2)')).getText().then((val) => {
-                                    this.__gender = val;
-                                })
-                            }
-                        })
-                    })
-            })
-        });
-    }
-
-    __getMusic() {
-        if (!this.__fbName) throw "name is null";
-
-        this.driver.get(`https://www.facebook.com/${this.__fbName}/music`);
-        this.driver.findElements(By.css("[id*='collection_wrapper_'] [data-collection-item] a[href*='profile']")).then((els) => {
-            if (els.length) {
-                this.__music = [];
-            }
-            els.forEach((el, index) => {
-                webdriver.promise.fulfilled(el)
-                    .then((pElem) => {
-                        return pElem.getText().then((text) => {
-                            this.__music.push(text)
-                        })
-                    })
-            });
-        });
-    }
 
     __saveScreenshot() {
         return this.driver.takeScreenshot().then((data) => {
