@@ -49,10 +49,12 @@ class FbScraper {
         this.driver.findElement(By.css("#loginbutton")).click();
 
         this.driver.get(`https://www.facebook.com/${this.config.id}`);
-        return this.driver.findElements(By.className('_44wv _1-l4'))
+  
+    
+        return this.driver.findElements(By.css('._6a ._44wt  a'))
         .then((items)=>{
-            webdriver.promise.map(items, (item)=>{
-               item.getAttribute('innerHTML').then(inner=>{
+          items.map((item)=>{
+               item.getAttribute('href').then(inner=>{
                    console.log(inner)
                })
             })

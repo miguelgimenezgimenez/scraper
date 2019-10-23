@@ -10,15 +10,6 @@ class JobFluentScraper {
 	getByClassNameAndAttr(url, element, attr) {
 		return new Promise((resolve) => {
 			this.driver.get(url);
-			this.driver.findElements(By.className(element)).then((els) => {
-				const promises = els.map((webElement) => {
-					return webElement.getAttribute(attr).then((inner) => {
-            return inner;
-					});
-				});
-
-				Promise.all(promises).then(resolve);
-			});
 		});
 	}
 
