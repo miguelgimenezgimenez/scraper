@@ -7,3 +7,6 @@ then run
 `node fbExample.js` 
 or 
 `node jobExample.js`
+
+documentation for selenium:
+https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/
